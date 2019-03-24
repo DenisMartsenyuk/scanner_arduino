@@ -19,7 +19,7 @@ int zHomingSpeed = 10; //Установить
 float zReduction = 1.0; //Установить
 String zLastCommand = "";
 bool isZHoming = false;
-int zEndStop = 12; //Установить
+int zEndStop = 11; //Установить
 
 int pinDoorEndstop = 6; //Установить
 
@@ -43,6 +43,10 @@ void setup() {
 	pinMode(pinDoorEndstop, INPUT);
 
 	pinMode(pinLaser, OUTPUT);
+
+	pinMode(12, OUTPUT);
+	pinMode(10, OUTPUT);
+
 }
 
 int getStep(float distance) {
@@ -51,7 +55,7 @@ int getStep(float distance) {
 
 void loop() {
 	if(digitalRead(pinDoorEndstop) && isZHoming && zStepper.isRunning()) {
-		zStepper.setSpeed(0);
+		zStepper.setCurrentPosition(0);
 		isZHoming = false;
 		Serial.println("SZH" + String(stopRead));
 	}
@@ -111,6 +115,7 @@ void loop() {
 		tStepper.run();
 	if (zLastCommand != "")
 		zStepper.run();
-	if (isZHoming)
+	if (isZHoming){
 		zStepper.runSpeed();
+	}
 }
